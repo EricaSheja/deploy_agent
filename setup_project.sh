@@ -13,6 +13,39 @@ if [ -d "$PARENT_DIR" ]; then
     exit 1
 fi
 
+handle_interrupt() {
+    echo " "
+    echo " Interrupt detected (SIGINT / Ctrl+C)!"
+    echo "   Script was cancelled mid-execution."
+    echo " "
+
+    if [ -d "$PARENT_DIR" ]; then
+        echo " Bundling current state "
+        echo " Archiving '$PARENT_DIR' → '$ARCHIVE_NAME' "
+     
+        tar -czf "$ARCHIVE_NAME" "$PARENT_DIR" 2>/dev/null
+
+        if [ -f "$ARCHIVE_NAME" ]; then
+            echo " Archive created: $ARCHIVE_NAME"
+        else
+            echo " Archive creation failed — skipping."
+        fi
+
+        echo " "
+        echo " Cleaning up incomplete directory"
+        rm -rf "$PARENT_DIR"
+        echo " Removed incomplete directory: $PARENT_DIR"
+    else
+        echo "   No directory was created yet hence nothing to archive or clean."
+    fi
+
+    echo " "
+    echo "  Workspace is clean. Exiting gracefully."
+    exit 1
+}
+
+trap 'handle_interrupt' SIGINT SIGTERM
+
 mkdir -p "$PARENT_DIR/Helpers"
 mkdir -p "$PARENT_DIR/reports"
 
@@ -118,7 +151,7 @@ if [[ "$update_choice" == "yes" ]]; then
       
         elif [ "$failure_val" -ge "$warning_val" ]; then
             echo " Failure threshold ($failure_val%) must be less than Warning threshold ($warning_val%)."
-        else
+       else
             break
         fi
     done
