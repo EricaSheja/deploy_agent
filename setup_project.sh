@@ -99,13 +99,13 @@ echo "  Default Failure threshold : 50%"
 
 read -p "Do you want to update the attendance thresholds? (yes/no): " update_choice
 
-if [[ "$update_choice" == "yes" ]]; then
+if [[ "$update_choice"  "yes" ]]; then
 
     while true; do
         read -p "Enter new Warning threshold % (default 75, must be > Failure): " warning_val
-        warning_val="${warning_val:-75}" 
-        if ! [ "$warning_val" -lt 1 ] || [ "$warning_val" -gt 100 ]; then
-            echo "  Invalid input. Please enter a whole number between 1 and 100."
+        warning_val="${warning_val:-75}"
+        if ! [[ "$warning_val" =~ ^[0-9]+$ ]] || [ "$warning_val" -lt 1 ] || [ "$warning_val" -gt 100 ]; then
+            echo "  ✘ Invalid input. Please enter a whole number between 1 and 100."
         else
             break
         fi
@@ -113,34 +113,31 @@ if [[ "$update_choice" == "yes" ]]; then
 
     while true; do
         read -p "Enter new Failure threshold % (default 50, must be < Warning): " failure_val
-        failure_val="${failure_val:-50}" 
-
-        if ! [ "$failure_val" -lt 1 ] || [ "$failure_val" -gt 100 ]; then
-            echo "  Invalid input. Please enter a whole number between 1 and 100."
-       
+        failure_val="${failure_val:-50}"
+        if ! [[ "$failure_val" =~ ^[0-9]+$ ]] || [ "$failure_val" -lt 1 ] || [ "$failure_val" -gt 100 ]; then
+            echo " Invalid input. Please enter a whole number between 1 and 100."
+      
         elif [ "$failure_val" -ge "$warning_val" ]; then
             echo " Failure threshold ($failure_val%) must be less than Warning threshold ($warning_val%)."
         else
             break
         fi
     done
-
     CONFIG_FILE="$PARENT_DIR/Helpers/config.json"
 
     sed -i "s/\"warning\": [0-9]*/\"warning\": $warning_val/" "$CONFIG_FILE"
     sed -i "s/\"failure\": [0-9]*/\"failure\": $failure_val/" "$CONFIG_FILE"
 
-    echo ""
+    echo " "
     echo " Thresholds updated successfully!"
     echo "  Warning : ${warning_val}%"
     echo "  Failure : ${failure_val}%"
-    echo ""
-    echo "── Updated config.json "
+    echo " Updated config.json"
     cat "$CONFIG_FILE"
     echo " "
 
+
 else
-    echo " "
+    
     echo " Keeping default thresholds (Warning: 75%, Failure: 50%)."
 fi
-
