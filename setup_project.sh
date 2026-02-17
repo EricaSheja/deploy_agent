@@ -98,8 +98,7 @@ echo "  Default Warning threshold : 75%"
 echo "  Default Failure threshold : 50%"
 
 read -p "Do you want to update the attendance thresholds? (yes/no): " update_choice
-
-if [[ "$update_choice"  "yes" ]]; then
+if [[ "$update_choice" == "yes" ]]; then
 
     while true; do
         read -p "Enter new Warning threshold % (default 75, must be > Failure): " warning_val
