@@ -64,7 +64,11 @@ if __name__ == "__main__":
 EOF
 
 cat > "$PARENT_DIR/Helpers/assets.csv" << 'EOF'
-table
+Email,Names,Attendance Count,Absence Count
+alice@example.com,Alice Johnson,14,1
+bob@example.com,Bob Smith,7,8
+charlie@example.com,Charlie Davis,4,11
+diana@example.com,Diana Prince,15,0
 EOF
 
 cat > "$PARENT_DIR/Helpers/config.json" << 'EOF'
