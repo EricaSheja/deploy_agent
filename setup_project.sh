@@ -123,8 +123,7 @@ attendance is 46.7%. You will fail this class.
 Davis, your attendance is 26.7%. You will fail this class.
 EOF
 echo " Directory structure created successfully!"
-
-echo " "
+tree "attendance_tracker_${input}"
 echo "  Attendance Threshold Configuration"
 echo " "
 echo "  Default Warning threshold : 75%"
@@ -172,4 +171,58 @@ if [[ "$update_choice" == "yes" ]]; then
 else
     
     echo " Keeping default thresholds (Warning: 75%, Failure: 50%)."
+fi
+
+echo "        ENVIRONMENT HEALTH CHECK         "
+
+HEALTH_PASS=true
+echo ""
+echo "  [1] Checking python3 installation..."
+
+if command -v python3 &>/dev/null; then
+    PYTHON_VERSION=$(python3 --version 2>&1)
+    echo " python3 is installed   →  $PYTHON_VERSION"
+else
+    echo " WARNING: python3 was NOT found on this system."
+    echo " The attendance_checker.py file was created, but cannot"
+    echo " be executed until python3 is installed."
+    echo " Install it with:  sudo apt install python3"
+    HEALTH_PASS=false
+fi
+
+echo ""
+echo "  [2] Verifying application directory structure..."
+
+EXPECTED_ITEMS=(
+    "$PARENT_DIR"
+    "$PARENT_DIR/attendance_checker.py"
+    "$PARENT_DIR/Helpers"
+    "$PARENT_DIR/Helpers/assets.csv"
+    "$PARENT_DIR/Helpers/config.json"
+    "$PARENT_DIR/reports"
+    "$PARENT_DIR/reports/reports.log"
+)
+
+STRUCTURE_OK=true
+
+for item in "${EXPECTED_ITEMS[@]}"; do
+    if [ -e "$item" ]; then
+        echo "  Found   →  $item"
+    else
+        echo "  MISSING →  $item"
+        STRUCTURE_OK=false
+        HEALTH_PASS=false
+    fi
+done
+
+if [ "$HEALTH_PASS" = true ]; then
+    echo " Health Check PASSED — setup is complete and environment is ready."
+else
+    echo " Health Check FINISHED WITH WARNINGS."
+    if [ "$STRUCTURE_OK" = false ]; then
+        echo " One or more expected files/folders are missing."
+    fi
+    if ! command -v python3 &>/dev/null; then
+        echo " python3 is not installed. Please install it to run the tracker."
+    fi
 fi
