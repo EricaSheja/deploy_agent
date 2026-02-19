@@ -3,11 +3,11 @@ OVERVIEW
 This is a script written using Linux commands that creates a directory structure, with a parent directory which has 3 child directories with files inside them
 It also asks the user if they want to update the attendance thresholds and then allows them to do so if they want, if not it stays with the default attendance thresholds.
 It also implements a signal trap to handle user interrupts if the user clicks CTRL+C while the program is running.
-It also performs a health check, where it checks if Python3 is installed on your local system.
+It also performs a health check, where it checks if Python3 is installed on your local system and verifies the presence of all requested files in the assignment.
+You can run the script using the commands to run a shell script like : bash setup_project.sh or any other and the script will do all the below details.
 
-FEATURES
 DIRECTORY CREATION
-Creates a parent directory named attendance_tracker_{input}, where {input} is user provided.
+Creates a parent directory named attendance_tracker_{input}, where {input} will be provided by the user.
 The parent directory contains 3 directories named: attendance_checker.py, Helpers and Reports
 The "Helpers" directory contains 2 files named: assets.csv and config.json, we also add data in these files in the sript.
 The "Reports" directory contains 1 file named: reports.log which also has data in it added through the script.
