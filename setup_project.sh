@@ -7,6 +7,7 @@ if [ -z "$input" ]; then
 fi
 
 PARENT_DIR="attendance_tracker_${input}"
+ARCHIVE_NAME="attendance_tracker_${input}_archive"
 
 if [ -d "$PARENT_DIR" ]; then
     echo "Error: Directory '$PARENT_DIR' already exists."
