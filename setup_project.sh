@@ -7,6 +7,7 @@ if [ -z "$input" ]; then
 fi
 
 PARENT_DIR="attendance_tracker_${input}"
+ARCHIVE_NAME="attendance_tracker_${input}_archive"
 
 if [ -d "$PARENT_DIR" ]; then
     echo "Error: Directory '$PARENT_DIR' already exists."
@@ -14,36 +15,33 @@ if [ -d "$PARENT_DIR" ]; then
 fi
 
 handle_interrupt() {
-    echo " "
-    echo " Interrupt detected (SIGINT / Ctrl+C)!"
-    echo "   Script was cancelled mid-execution."
-    echo " "
+    echo ""
+    echo " Interrupt signal detected (SIGINT / Ctrl+C)!"
+    echo " Script was cancelled mid-execution."
 
     if [ -d "$PARENT_DIR" ]; then
-        echo " Bundling current state "
-        echo " Archiving '$PARENT_DIR' → '$ARCHIVE_NAME' "
-     
+        echo " Bundling current state"
+        echo " Archiving '$PARENT_DIR' to '$ARCHIVE_NAME'"
         tar -czf "$ARCHIVE_NAME" "$PARENT_DIR" 2>/dev/null
 
         if [ -f "$ARCHIVE_NAME" ]; then
             echo " Archive created: $ARCHIVE_NAME"
         else
-            echo " Archive creation failed — skipping."
+            echo " Archive creation failed."
         fi
 
-        echo " "
+     
         echo " Cleaning up incomplete directory"
         rm -rf "$PARENT_DIR"
         echo " Removed incomplete directory: $PARENT_DIR"
     else
-        echo "   No directory was created yet hence nothing to archive or clean."
+        echo " No directory was created yet — nothing to archive or clean."
     fi
 
-    echo " "
-    echo "  Workspace is clean. Exiting gracefully."
+    echo ""
+    echo " Workspace is clean. Exiting gracefully."
     exit 1
 }
-
 trap 'handle_interrupt' SIGINT SIGTERM
 
 mkdir -p "$PARENT_DIR/Helpers"
