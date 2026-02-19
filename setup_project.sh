@@ -134,7 +134,7 @@ if [[ "$update_choice" == "yes" ]]; then
         read -p "Enter new Warning threshold % (default 75, must be > Failure): " warning_val
         warning_val="${warning_val:-75}"
         if ! [[ "$warning_val" =~ ^[0-9]+$ ]] || [ "$warning_val" -lt 1 ] || [ "$warning_val" -gt 100 ]; then
-            echo "  ✘ Invalid input. Please enter a whole number between 1 and 100."
+            echo "  Invalid input. Please enter a whole number between 1 and 100."
         else
             break
         fi
